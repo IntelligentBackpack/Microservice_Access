@@ -2,13 +2,11 @@
   "name": "microservice_access",
   "version": "1.0.0",
   "description": "This repo contain the code about the microservice related to the access authentication and role changing in the system",
-  "main": "sources\\main\\index.js",
+  "main": "sources\\build\\index.js",
   "scripts": {
-    "build": "node sources\\main\\index.js",
-    "start": "node sources\\main\\index.js",
-    "test": "exit 1 || jest",
-    "test_coverage": "jest --coverage",
-    "askquery": "node sqlQuery.js"
+    "build": "npx tsc",
+    "start": "node sources/build/index.js",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q sources/build/index.js\""
   },
   "repository": {
     "type": "git",
@@ -21,8 +19,15 @@
   },
   "homepage": "https://github.com/IntelligentBackpack/Microservice_Access#readme",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jest": "^29.5.0",
     "mssql": "^9.1.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "concurrently": "^8.0.1",
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.4"
   }
 }
