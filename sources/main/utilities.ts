@@ -1,4 +1,4 @@
-import crypto from 'crypto'
+/*import crypto from 'crypto'
 const hashIteration = 50
 
 export function encrypt(password: string) {
@@ -8,3 +8,4 @@ export function encrypt(password: string) {
     }
     return hash;
 }
+*/

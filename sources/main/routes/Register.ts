@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { encrypt } from '../utilities'
+//import { encrypt } from '../utilities'
 const queryAsk = require('../queries');
 const router = Router();
 
@@ -31,6 +31,6 @@ router.put('', async (req, res) => {
         return;
     }
     //now that password is ok and email is unique, we have to create the user
-    encrypt(credentials.password);
+    //encrypt(credentials.password);
 });
 
