@@ -9,3 +9,6 @@ router.get('', async (req, res) => {
 	res.send('Express + TypeScript Server from router with query ' + await queryAsk.query1());
 });
 
+router.get('/hello', async (req, res) => {
+	res.send('hello to you');
+});

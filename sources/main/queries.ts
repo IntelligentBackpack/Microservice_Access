@@ -1,5 +1,5 @@
 import sql, { config } from 'mssql';
-import { User } from './interfaces';
+import * as userI from './interfaces/User';
 
 const conf: config = {
     user: 'CloudSA665ece82', // better stored in an app setting such as process.env.DB_USER
@@ -43,19 +43,17 @@ export async function query1() {
     }
 }
 
-export async function findUserWithEmail(email: String): Promise<User> {
-    let user: User = {email: "", password: ""};
+export async function findUserWithEmail(email: String): Promise<userI.User> {
+    let user: userI.User = userI.defaultUser();
     try {
         var poolConnection: sql.ConnectionPool = await sql.connect(conf); //connect to the database
         var resultSet:sql.IResult<any> = await poolConnection.request()
                                         .query("select * from Utente where Email = '" + email + "'"); //execute the query
-
+        poolConnection.close(); //close connection with database
         // ouput row contents from default record set
         resultSet.recordset.forEach(function(row: any) {
-            user = {email: row.Email, password: row.Password};
+            user = userI.assignVals_JSON(row);
         });
-        
-        poolConnection.close(); //close connection with database
     } catch (e: any) {
         console.error(e.message);
     }
