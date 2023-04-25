@@ -15,8 +15,9 @@ describe('Testing base', function() {
 
     it('responds with hello', function(done) {
         const message: req = new req({name: "mario", password: "password"})
-        console.log("before sending: " + message.name + " " + message.password)
-        expect(2+2 == 4)
+        request(app)
+        .put('/login/hello')
+        .send(message.toObject())
+        .expect("hello to you", done)
     });
-
   });
