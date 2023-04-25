@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../main/app';
-import * as protoGen from '../main/sources/proto/users';
+import * as protoGen from '../main/generated/users';
 import req = protoGen.userspackage.UserRequest;
 
 const baseURL = "http://localhost:80"
