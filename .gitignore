@@ -131,4 +131,4 @@ dist
 
 # Typescript build file
 sources/build/
-sources/main
+sources/main/sources

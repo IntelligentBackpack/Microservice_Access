@@ -5,7 +5,6 @@ dotenv.config();
 
 const app: Express = express();
 
-
 app.get('/', async (req: Request, res: Response) => {
   	res.send('Access control microservice');
 });
