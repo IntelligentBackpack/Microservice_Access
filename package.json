@@ -4,7 +4,7 @@
   "description": "This repo contain the code about the microservice related to the access authentication and role changing in the system",
   "main": "sources/build/main/index.js",
   "scripts": {
-    "build": "protoc --ts_opt=esModuleInterop=true --ts_out=./sources/generated sources/proto/*.proto && npx tsc",
+    "build": "protoc --ts_opt=esModuleInterop=true --ts_out=./sources/main sources/proto/*.proto && npx tsc",
     "start": "node sources/build/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q sources/build/main/index.js\"",
     "test": "jest"
