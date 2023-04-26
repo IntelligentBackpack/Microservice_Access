@@ -1,0 +1,11 @@
+syntax = "proto3";
+package userspackage;
+
+message UserRequest {
+    string name = 1;
+    string password = 2;
+}
+
+message UserResponse {
+    string message = 1;
+}
