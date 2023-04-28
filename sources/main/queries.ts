@@ -29,3 +29,45 @@ export async function findUserWithEmail(email: String): Promise<userI.User> {
     return user; //return back all the found values
 }
 
+//il metodo è utilizzato per registrare un utente nella tabella degli utenti
+export async function createUser(user: userI.User) {
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("insert into Utente values ('" + user.email + "', '" + user.password + "', '" + user.nome + "', '" + user.cognome + "', null, 0, null)"); //execute the query
+        poolConnection.close(); //close connection with database
+    } catch (e: any) {
+        console.error(e);
+    }
+}
+
+//il metodo viene utilizzato per verificare se la persona passata ha privilegi alti per eseguire l'azione
+export async function verifyPrivileges_HIGH(emailEsecutore: string): Promise<boolean> {
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("select Ruolo from utente where ((Email = '" + emailEsecutore + "') AND (Ruolo >= 3) AND (Ruolo <= 4))"); //execute the query
+        poolConnection.close(); //close connection with database
+        return resultSet.rowsAffected[0] == 1
+    } catch (e: any) {
+        console.error(e);
+    }
+    return false;
+}
+
+//il metodo viene utilizzato per verificare se la persona passata ha privilegi bassi per eseguire l'azione
+export async function verifyPrivileges_LOW(emailEsecutore: string): Promise<boolean> {
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("select ruolo from utente where ((Email = '" + emailEsecutore + "') AND (Ruolo >= 2) AND (Ruolo <= 4))"); //execute the query
+        poolConnection.close(); //close connection with database
+        resultSet.recordset.forEach(function(row: any) {
+            return true;
+        });
+    } catch (e: any) {
+        console.error(e);
+    }
+    return false;
+}
+

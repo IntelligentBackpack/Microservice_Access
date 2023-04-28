@@ -14,8 +14,8 @@ export function defaultUser(): User {
 }
 
 export function assignVals_JSON(json: any): User {
-    const user: User = {email: json.Email, password: json.Password, nome: json.Nome, cognome: json.Cognome, 
-                        istituto: json.Istituto_Iscritto, ruolo: json.Ruolo, classe: json.Classe};
+    const user: User = {email: json.email, password: json.password, nome: json.nome, cognome: json.cognome, 
+                        istituto: json.istituto, ruolo: json.ruolo, classe: json.classe};
     return user;
 }
 
