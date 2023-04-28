@@ -19,6 +19,6 @@ export function assignVals_JSON(json: any): User {
     return user;
 }
 
-export function verify_Basic_DataPresence(json: any): boolean {
-    return (json.hasOwnProperty('Email') && json.hasOwnProperty('Password') && json.hasOwnProperty('Nome') && json.hasOwnProperty('Cognome'))
+export function verify_Basic_DataPresence(json: any): boolean {    
+    return (json.email && json.password && json.nome && json.cognome)
 }

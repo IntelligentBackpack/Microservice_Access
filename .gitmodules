@@ -1,0 +1,3 @@
+[submodule "AccessCommunication"]
+	path = AccessCommunication
+	url = https://github.com/IntelligentBackpack/AccessCommunication.git

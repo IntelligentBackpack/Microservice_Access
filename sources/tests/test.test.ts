@@ -1,23 +1,29 @@
 import request from 'supertest';
-import app from '../main/app';
-import * as protoGen from '../main/generated/users';
-import req = protoGen.userspackage.UserRequest;
+import app, { response } from '../main/app';
+import * as protoGen from '../main/generated/access';
+import proto = protoGen.access;
 
-const baseURL = "http://localhost:80"
+jest.setTimeout(15000);
 
 
-describe('Testing base', function() {
-    it('test', function(done) {
-        request(app)
-            .get('/login/hello')
-            .expect("hello to you", done)
+
+describe('Testing register routing', function() {
+    it('Should return an error 400 for bad message format', async() => {
+        const message: proto.createUserRequest = new proto.createUserRequest({email: "mario", password: "password"});
+        const serverResponse = await request(app).put('/register/').send(message.toObject());
+
+        expect(serverResponse.statusCode).toBe(400)
+        expect(serverResponse.body.message).toBe("Message wrong formatted. Require Email, Password, Nome, Cognome fields.")
     });
 
-    it('responds with hello', function(done) {
-        const message: req = new req({name: "mario", password: "password"})
-        request(app)
-        .put('/login/hello')
-        .send(message.toObject())
-        .expect("hello to you", done)
-    });
-  });
+    it("should return error 400 for bad password", async() => {
+        const message: proto.createUserRequest = new proto.createUserRequest({email: "asd", password: "password", nome: "mario", cognome: "rossi"});
+        const serverResponse = await request(app).put('/register').send(message.toObject());
+
+        expect(serverResponse.statusCode).toBe(400)
+        expect(serverResponse.body.message).toBe("Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter and one number!")
+    })
+
+
+
+});

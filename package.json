@@ -4,10 +4,10 @@
   "description": "This repo contain the code about the microservice related to the access authentication and role changing in the system",
   "main": "sources/build/main/index.js",
   "scripts": {
-    "build": "mkdirp ./sources/main/generated && protoc --ts_opt=esModuleInterop=true --ts_out=./sources/main/generated -I ./sources/proto ./sources/proto/*.proto && npx tsc",
+    "build": "mkdirp ./sources/main/generated && protoc --ts_opt=esModuleInterop=true --ts_out=./sources/main/generated -I ./AccessCommunication ./AccessCommunication/*.proto && npx tsc",
     "start": "node sources/build/main/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q sources/build/main/index.js\"",
-    "test": "jest"
+    "test": "protoc --ts_opt=esModuleInterop=true --ts_out=./sources/main/generated -I ./AccessCommunication ./AccessCommunication/*.proto && jest"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
     "google-protobuf": "^3.21.2",
     "jest": "^29.5.0",
     "mssql": "^9.1.1",
+    "object-hash": "^3.0.0",
     "supertest": "^6.3.3"
   },
   "devDependencies": {
