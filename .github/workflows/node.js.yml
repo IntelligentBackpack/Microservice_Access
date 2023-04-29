@@ -20,6 +20,11 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
+
+    - name: Install submodules
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
     - name: Install Protoc
       uses: arduino/setup-protoc@v1
       with:
