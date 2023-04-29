@@ -11,32 +11,40 @@ const userGood: proto.User = new proto.User({email: makeid(15), password: "asdRE
 describe('Testing register routing', function() {
     it('Should return an error 400 for bad message format', async() => {
         //data
-        const user: proto.User = new proto.User({email: "mario", password: "password", nome: "mario"});
-        const message: proto.UserRequest_Permissions = new proto.UserRequest_Permissions({email_Creatore: "admin", nuovo_utente: user})
+        const user: proto.User = new proto.User({email: "mario", password: "password", nome: "mario"});        
         //request
-        const serverResponse = await request(app).put('/register/').send(message.toObject());
+        const serverResponse = await request(app).put('/register/').send(user.toObject());
         //recive
         expect(serverResponse.statusCode).toBe(400)
         expect(serverResponse.body.message).toBe("Message wrong formatted. Require Email, Password, Nome, Cognome fields.")
     });
 
     it("should return error 400 for bad password", async() => {
-        //data
-        const message: proto.UserRequest_Permissions = new proto.UserRequest_Permissions({email_Creatore: "admin", nuovo_utente: userBad})
         //request
-        const serverResponse = await request(app).put('/register').send(message.toObject());
+        const serverResponse = await request(app).put('/register').send(userBad.toObject());
         //recive
         expect(serverResponse.statusCode).toBe(400)
         expect(serverResponse.body.message).toBe("Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter and one number!")
     })
 
     it("should create a new user", async() => {
-        //data
-        const message: proto.UserRequest_Permissions = new proto.UserRequest_Permissions({email_Creatore: "admin", nuovo_utente: userGood})
         //request
-        const serverResponse = await request(app).put('/register').send(message.toObject());
+        const serverResponse = await request(app).put('/register').send(userGood.toObject());
         //recive
-        expect(serverResponse.body.message).toBe("User created.")
+        expect(serverResponse.statusCode).toBe(200)
+        expect(serverResponse.body.email).toBe(userGood.email)
+        expect(serverResponse.body.password).toBe(userGood.password)
+        expect(serverResponse.body.nome).toBe(userGood.nome)
+        expect(serverResponse.body.cognome).toBe(userGood.cognome)
+        expect(serverResponse.body.role).toBe(proto.Role.USER)
+    })
+
+    it("should give error 400 for email already in use", async() => {
+        //request
+        const serverResponse = await request(app).put('/register').send(userGood.toObject());
+        //recive
+        expect(serverResponse.statusCode).toBe(400)
+        expect(serverResponse.body.message).toBe("Email already token.")
     })
 });
 
@@ -81,6 +89,13 @@ describe('Testing remove routing', function() {
     })
 });
 
+
+describe('testing utility routing', function() {
+    it("should give default page", async () => {
+        const serverResponse = await request(app).get('').send();
+        expect(serverResponse.text).toBe("Access control microservice")
+    })
+})
 
 
 function makeid(length: number) {

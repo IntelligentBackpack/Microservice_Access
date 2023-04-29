@@ -7,7 +7,8 @@
     "build": "mkdirp ./sources/main/generated && protoc --ts_opt=esModuleInterop=true --ts_out=./sources/main/generated -I ./AccessCommunication ./AccessCommunication/*.proto && npx tsc",
     "start": "node sources/build/main/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q sources/build/main/index.js\"",
-    "test": "protoc --ts_opt=esModuleInterop=true --ts_out=./sources/main/generated -I ./AccessCommunication ./AccessCommunication/*.proto && jest"
+    "test": "protoc --ts_opt=esModuleInterop=true --ts_out=./sources/main/generated -I ./AccessCommunication ./AccessCommunication/*.proto && jest",
+    "coverage": "protoc --ts_opt=esModuleInterop=true --ts_out=./sources/main/generated -I ./AccessCommunication ./AccessCommunication/*.proto && jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,8 @@
     "supertest": "^6.3.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.6.1",
+    "@commitlint/config-conventional": "^17.6.1",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.1",
     "@types/mssql": "^8.1.2",
