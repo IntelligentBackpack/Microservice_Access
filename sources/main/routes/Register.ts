@@ -39,7 +39,7 @@ router.put('', async (req: {body: proto.createUserRequest}, res) => {
 
     //now that password is ok and email is unique, we have to create the user
     req.body.nuovo_utente.password = utility.apply_hash(req.body.nuovo_utente.password);
-    await queryAsk.createUser(userI.assignVals_JSON(req.body))
+    await queryAsk.createUser(userI.assignVals_JSON(req.body.nuovo_utente))
     res.status(200).send(new proto.createUserResponse({ message: "User created." }).toObject())
 });
 
