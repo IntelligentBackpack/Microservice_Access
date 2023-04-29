@@ -29,6 +29,20 @@ export async function findUserWithEmail(email: String): Promise<userI.User> {
     return user; //return back all the found values
 }
 
+export async function login(email: string, password: string): Promise<boolean> {
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("select * from Utente where Email = '" + email + "' AND Password = '" + password + "'"); //execute the query
+        poolConnection.close(); //close connection with database
+        // ouput row contents from default record set
+        return resultSet.rowsAffected[0] == 1
+    } catch (e: any) {
+        console.error(e);
+    }
+    return false;
+}
+
 //il metodo è utilizzato per registrare un utente nella tabella degli utenti
 export async function createUser(user: userI.User) {
     try {
@@ -71,3 +85,13 @@ export async function verifyPrivileges_LOW(emailEsecutore: string): Promise<bool
     return false;
 }
 
+export async function deleteUser(user:userI.User) {
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("Delete from Utente where Email = '" + user.email + "'"); //execute the query
+        poolConnection.close(); //close connection with database
+    } catch (e: any) {
+        console.error(e);
+    }
+}
