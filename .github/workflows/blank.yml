@@ -18,12 +18,26 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
-      # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
           echo ${{ github.event.head_commit.message }}
-          echo "Whats in: ${{ env.GITHUB_ENV}}"
-          echo "FOO=1" >> $GITHUB_ENV
-          echo "Whats in: ${{ env.GITHUB_ENV}}"
           echo "major version: ${{ vars.BREAKING_NUM }}"
+          
+      - name: Set a persistent value
+        id: set_persistent_value
+        uses: aaimio/set-persistent-value@v1.2.1
+        with:
+          key: foo
+          value: bar
+          access_token: ${{ secrets.PERSISTENT_VALUE_ACCESS_TOKEN }}
+
+
+      - name: Get a persistent value
+        id: get_persistent_value
+        uses: aaimio/get-persistent-value@v1.2.1
+        with:
+          key: foo
+          access_token: ${{ secrets.PERSISTENT_VALUE_ACCESS_TOKEN }}
+      - name: Some other step
+        run: |
+          echo ${{ steps.get_persistent_value.outputs.value }}
