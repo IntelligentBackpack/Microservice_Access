@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: build only on develop tag
         if: ${{ github.event_name == 'push' && github.event.push.target_commitish != 'develop'}}
-        run: exit 0
+        run: exit -1
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
