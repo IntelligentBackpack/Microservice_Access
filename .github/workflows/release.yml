@@ -6,7 +6,7 @@ name: Release
 on:
   push:
     branches:    
-      - 'develop'
+      - 'release'
     tags:
       - "v*"
 
@@ -16,10 +16,6 @@ jobs:
     name: "Release"
     runs-on: "ubuntu-latest"
     steps:
-      - name: build only on develop tag
-        if: ${{ github.event_name == 'push' && github.ref_name != 'develop'}}
-        run: exit -1
-
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
