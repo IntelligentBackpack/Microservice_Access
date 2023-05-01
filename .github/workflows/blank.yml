@@ -16,14 +16,28 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     if: contains(github.event.head_commit.message, '--minor')
-    steps:          
+    steps:         
+      - name: Get a persistent value
+        id: get_persistent_value_before
+        uses: aaimio/get-persistent-value@v1.2.1
+        with:
+          key: foo
+          access_token: ${{ secrets.PERSISTENT_VALUE_ACCESS_TOKEN }}
+      - name: Some other step
+        run: |
+          echo "value of foo: ${{ steps.get_persistent_value.outputs.value }}"
+          echo "VERSION=${{ steps.get_persistent_value.outputs.value }}" >> $GITHUB_ENV
+          
+    
+
       - name: Set a persistent value
         id: set_persistent_value
         uses: aaimio/set-persistent-value@v1.2.1
         with:
           key: foo
-          value: 1
+          value: $VERSION
           access_token: ${{ secrets.PERSISTENT_VALUE_ACCESS_TOKEN }}
+          
 
 
       - name: Get a persistent value
@@ -34,4 +48,4 @@ jobs:
           access_token: ${{ secrets.PERSISTENT_VALUE_ACCESS_TOKEN }}
       - name: Some other step
         run: |
-          echo ${{ steps.get_persistent_value.outputs.value }}
+          echo "found at the end: ${{ steps.get_persistent_value.outputs.value }}"
