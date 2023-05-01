@@ -15,13 +15,13 @@ jobs:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
+    if: contains(${{ github.event.head_commit.message }}, '--minor')
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - name: Run a multi-line script
         run: |
           echo ${{ github.event.head_commit.message }}
-          echo "major version: ${{ vars.BREAKING_NUM }}"
           
       - name: Set a persistent value
         id: set_persistent_value
