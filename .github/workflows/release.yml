@@ -16,6 +16,11 @@ jobs:
     name: "Release"
     runs-on: "ubuntu-latest"
     steps:
+      - name: build only on develop tag
+        if: ${{ github.event_name == 'push' && github.ref_name != 'develop'}}
+        run: echo github.ref_name
+    
+    
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
