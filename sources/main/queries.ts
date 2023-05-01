@@ -95,3 +95,55 @@ export async function deleteUser(user:userI.User) {
         console.error(e);
     }
 }
+
+export async function change_name(user:userI.User) {
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("Update Utente Set Nome = '" + user.nome + "' Where Email = '" + user.email + "'"); //execute the query
+        poolConnection.close(); //close connection with database
+        return true;
+    } catch (e: any) {
+        console.error(e);
+    }
+    return false;
+}
+
+export async function change_cognome(user:userI.User) {
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("Update Utente Set Cognome = '" + user.cognome + "' Where Email = '" + user.email + "'"); //execute the query
+        poolConnection.close(); //close connection with database
+        return true;
+    } catch (e: any) {
+        console.error(e);
+    }
+    return false;
+}
+
+export async function change_email(email_vecchia: string, email_nuova: string) {
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("Update Utente Set Email = '" + email_nuova + "' Where Email = '" + email_vecchia + "'"); //execute the query
+        poolConnection.close(); //close connection with database
+        return true;
+    } catch (e: any) {
+        console.error(e);
+    }
+    return false;
+}
+
+export async function change_password(user:userI.User) {
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("Update Utente Set Password = '" + user.password + "' Where Email = '" + user.email + "'"); //execute the query
+        poolConnection.close(); //close connection with database
+        return true;
+    } catch (e: any) {
+        console.error(e);
+    }
+    return false;
+}

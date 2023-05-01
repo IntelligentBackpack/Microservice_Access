@@ -8,7 +8,7 @@ const router = Router();
 export default router;
 
 
-//this route manage the remove of a user
+//this route manage the login a user
 router.post('', async (req: {body: proto.User}, res) => {
     if(await queryAsk.login(req.body.email, utility.apply_hash(req.body.password))) {
     	res.status(200).send(new proto.UserResponse({ message: "Confirmed login." }).toObject())
