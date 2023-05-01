@@ -11,7 +11,12 @@ on:
 # Automatically create a GitHub Release, with release details specified (the relevant commits)
 jobs:
   release:
-    name: "Release"
+    # Only release from prod branch
+  - name: Exit if not on production branch
+    if: endsWith(github.event.base_ref, 'develop') == false
+    run: exit -1
+
+  - name: "Release"
     runs-on: "ubuntu-latest"
     steps:
       - uses: "marvinpinto/action-automatic-releases@latest"
