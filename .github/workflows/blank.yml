@@ -35,7 +35,7 @@ jobs:
         uses: aaimio/set-persistent-value@v1.2.1
         with:
           key: foo
-          value: $VERSION
+          value: 0
           access_token: ${{ secrets.PERSISTENT_VALUE_ACCESS_TOKEN }}
           
 
