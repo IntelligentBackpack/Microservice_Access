@@ -23,5 +23,5 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo ${{ github.event.head_commit.message }}
-          set $vars.BREAKING_NUM = 1
+          echo "BREAKING_NUM=1" >> $GITHUB_ENV
           echo "major version: ${{ vars.BREAKING_NUM }}"
