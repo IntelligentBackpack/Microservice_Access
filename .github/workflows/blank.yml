@@ -22,7 +22,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo ${{ github.event.head_commit.message }}
-          echo "we are still testing"
+          echo "we are still testing, sorry"
           
       - name: Set a persistent value
         id: set_persistent_value
