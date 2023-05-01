@@ -5,8 +5,7 @@ name: Node.js Package
 
 on:
   push:
-    tags:
-      - "v*"
+    branches: ["main", "develop"]
 
 # Automatically create a GitHub Release, with release details specified (the relevant commits)
 jobs:
