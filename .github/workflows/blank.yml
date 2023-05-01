@@ -25,4 +25,5 @@ jobs:
           echo ${{ github.event.head_commit.message }}
           echo "Whats in: ${{ env.GITHUB_ENV}}"
           echo "FOO=1" >> $GITHUB_ENV
+          echo "Whats in: ${{ env.GITHUB_ENV}}"
           echo "major version: ${{ vars.BREAKING_NUM }}"
