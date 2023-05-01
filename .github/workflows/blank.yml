@@ -23,5 +23,6 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo ${{ github.event.head_commit.message }}
+          echo "Whats in: $GITHUB_ENV"
           echo "FOO=1" >> $GITHUB_ENV
           echo "major version: ${{ vars.BREAKING_NUM }}"
