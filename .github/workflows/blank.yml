@@ -17,6 +17,8 @@ jobs:
     steps:        
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Print checkout directory
+        run: echo "${{ github.workspace }}"
       #- name: Restore cached Primes
       #  id: cache-primes-restore
       #  uses: actions/cache/restore@v3
