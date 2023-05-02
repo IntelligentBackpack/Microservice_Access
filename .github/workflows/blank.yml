@@ -33,7 +33,7 @@ jobs:
           path: ./.github/workflows/artifact.txt
           write-mode: overwrite
           contents: |
-            Hello World!
+            keep testing, maybe it will work
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
