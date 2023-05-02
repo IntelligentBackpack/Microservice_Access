@@ -2,9 +2,7 @@ name: Test
 
 on:
   push:
-    branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
+    branches: [ "release" ]
 
 jobs:
   # This workflow contains a single job called "build"
@@ -33,14 +31,14 @@ jobs:
           path: ./.github/workflows/artifact.txt
           write-mode: overwrite
           contents: |
-            keep testing, maybe it will work
+            keep testing, maybe it will work even from another branch
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
         with:
           github_token: ${{ secrets.WORKFLOW_TOKEN }}
           branch: develop
-          message: 'Overwritten by Github Actions'
+          message: 'Overwritten by Github Actions on branch develop'
           
       - name: Read file
         id: package
