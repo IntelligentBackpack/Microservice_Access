@@ -17,22 +17,20 @@ jobs:
     steps:        
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Print checkout directory
-        run: echo "${{ github.workspace }}"
         
-      - name: Fetch action
-        id: pl
-        uses: Rishabh510/Path-lister-action@master
-        with:
-          path: "${{ github.workspace }}/"
-          type: ".json"
+      #- name: Fetch action
+      #  id: pl
+      #  uses: Rishabh510/Path-lister-action@master
+      #  with:
+      #    path: "${{ github.workspace }}/"
+      #    type: ".json"
 
-      - name: Output results
-        run: |
-          echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
-          for i in ${{ steps.pl.outputs.paths }}; do
-          echo $i
-          done  
+      #- name: Output results
+      #  run: |
+      #    echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
+      #    for i in ${{ steps.pl.outputs.paths }}; do
+      #    echo $i
+      #    done  
       
       
       #- name: Restore cached Primes
@@ -66,5 +64,5 @@ jobs:
       - name: cache artifacts
         uses: actions/cache/save@v3
         with:
-          path: math-cache
+          path: ./.github/workflows
           key: my-test-cache-example
