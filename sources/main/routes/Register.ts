@@ -38,5 +38,5 @@ router.put('', async (req: {body: proto.User}, res) => {
                                         nome: req.body.nome,
                                         cognome: req.body.cognome,
                                         role: proto.Role.USER}).toObject())
-});
 
+});
