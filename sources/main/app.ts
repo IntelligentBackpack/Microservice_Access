@@ -15,5 +15,10 @@ import loginRouter from './routes/Login';
 app.use('/login', loginRouter)
 import registerRouter from './routes/Register';
 app.use('/register', registerRouter)
+import removeRouter from './routes/Remove';
+app.use('/remove', removeRouter)
+import utilsRouter from './routes/Utils';
+app.use('/utility', utilsRouter)
+
 
 export = app;

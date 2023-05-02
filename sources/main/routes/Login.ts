@@ -1,24 +1,19 @@
 import { Router } from 'express';
+import * as protoGen from "../generated/access";
+import * as utility from "../utilities"
+import proto = protoGen.access;
+
 const queryAsk = require('../queries');
 const router = Router();
-import * as protoGen from "../generated/users";
-import Req = protoGen.userspackage.UserRequest;
-
 export default router;
 
 
-router.get('', async (req, res) => {
-	res.send('Express + TypeScript Server from router with query ' + await queryAsk.query1());
+//this route manage the login a user
+router.post('', async (req: {body: proto.User}, res) => {
+    if(await queryAsk.login(req.body.email, utility.apply_hash(req.body.password))) {
+    	res.status(200).send(new proto.UserResponse({ message: "Confirmed login." }).toObject())
+		return;
+	}
+	res.status(401).send(new proto.UserResponse({ message: "Wrong credentials." }).toObject())
 });
 
-
-router.get('/hello', async (req, res) => {
-	res.send('hello to you');
-});
-
-router.put('/hello', async (req: { body: Req; }, res) => {
-	const test = req.body;
-	console.log("recived: " + req.body.name + " " + req.body.password)
-
-	res.send('hello to you');
-});

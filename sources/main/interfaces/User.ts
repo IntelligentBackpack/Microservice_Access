@@ -1,3 +1,6 @@
+import * as protoGen from '../generated/access';
+import proto = protoGen.access;
+
 export interface User {
     email: string;
     password: string;
@@ -14,11 +17,16 @@ export function defaultUser(): User {
 }
 
 export function assignVals_JSON(json: any): User {
-    const user: User = {email: json.Email, password: json.Password, nome: json.Nome, cognome: json.Cognome, 
-                        istituto: json.Istituto_Iscritto, ruolo: json.Ruolo, classe: json.Classe};
+    const user: User = {email: json.email, password: json.password, nome: json.nome, cognome: json.cognome, 
+                        istituto: json.istituto, ruolo: json.ruolo, classe: json.classe};
     return user;
 }
 
-export function verify_Basic_DataPresence(json: any): boolean {
-    return (json.hasOwnProperty('Email') && json.hasOwnProperty('Password') && json.hasOwnProperty('Nome') && json.hasOwnProperty('Cognome'))
+export function generate_protoUser(json: any): proto.User {
+    return new proto.User({email: json.email, password: json.password, nome: json.nome, cognome: json.cognome, 
+                            istituto: json.istituto, role: json.ruolo, classe: json.classe})
+}
+
+export function verify_Basic_DataPresence(json: any): boolean {    
+    return (json.email && json.password && json.nome && json.cognome)
 }
