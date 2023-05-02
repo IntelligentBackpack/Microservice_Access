@@ -11,6 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: Klemensas/action-autotag@stable
+      id: create_tag
       with:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
@@ -24,4 +25,4 @@ jobs:
     #    version: ${{ steps.previoustag.outputs.tag }}
         
     - name: "Write Previus tag:"
-      run: echo "${{ steps.previous_step.outputs.tagname }}"
+      run: echo "${{ steps.create_tag.outputs.tagname }}"
