@@ -49,6 +49,7 @@ jobs:
           key: my-test-cache-example
       
       - name: ACTION BREAK
+        run: echo "ACTION BREAK"
       
       - name: Restore cached Primes
         id: cache-primes-restore
