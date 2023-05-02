@@ -46,7 +46,7 @@ jobs:
           path: math-homework.txt
           
       - name: cache artifacts
-        uses: actions/cache@v3
+        uses: actions/cache/save@v3
         with:
           path: math-cache
           key: my-test-cache-example
