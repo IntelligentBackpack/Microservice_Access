@@ -42,4 +42,12 @@ jobs:
           branch: develop
           message: 'Overwritten by Github Actions'
           
+      - name: Read file
+        id: package
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./.github/workflows/artifact.txt
+      - name: Echo artifact.txt
+        run: echo "${{ steps.package.outputs.content }}"
+          
       
