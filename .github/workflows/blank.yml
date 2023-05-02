@@ -18,40 +18,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       
-      - shell: bash
-        run: |
-          expr 3 + 7 > math-homework.txt
-      - name: Upload math result for job 1
-        uses: actions/upload-artifact@v3
+      - name: Modify artifacts.txt
+        uses: jaywcjlove/github-action-modify-file-content@main
         with:
-          name: homework
           path: ./.github/workflows/artifact.txt
-          
-      - name: cache artifacts
-        uses: actions/cache/save@v3
-        with:
-          path: ./.github/workflows
-          key: my-test-cache-example
-      
-      - name: ACTION BREAK
-        run: echo "ACTION BREAK"
-      
-      - name: Restore cached Primes
-        id: cache-primes-restore
-        uses: actions/cache/restore@v3
-        with:
-          path: ./.github/workflows
-          key: my-test-cache-example
-          
-      - name: Download math result
-        uses: actions/download-artifact@v3
-        with:
-          name: homework
-      - name: Print the final result
-        shell: bash
-        run: |
-          value=`cat ./.github/workflows/artifact.txt`
-          echo The result is $value
-          
+          body: "overwrite file content"
+          overwrite: 'true'
           
       
