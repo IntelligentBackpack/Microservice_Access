@@ -9,4 +9,3 @@ export function apply_hash(password: string) {
     
     return hashed;
 }
-*/
