@@ -30,8 +30,25 @@ jobs:
       #    echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
       #    for i in ${{ steps.pl.outputs.paths }}; do
       #    echo $i
-      #    done  
+      #    done
       
+      
+      - shell: bash
+        run: |
+          expr 3 + 7 > math-homework.txt
+      - name: Upload math result for job 1
+        uses: actions/upload-artifact@v3
+        with:
+          name: homework
+          path: ./.github/workflows/math-homework.txt
+          
+      - name: cache artifacts
+        uses: actions/cache/save@v3
+        with:
+          path: ./.github/workflows
+          key: my-test-cache-example
+      
+      - name: ACTION BREAK
       
       - name: Restore cached Primes
         id: cache-primes-restore
@@ -40,29 +57,15 @@ jobs:
           path: ./.github/workflows
           key: my-test-cache-example
           
-      - name: Download math result for job 2
+      - name: Download math result
         uses: actions/download-artifact@v3
         with:
           name: homework
       - name: Print the final result
         shell: bash
         run: |
-          value=`cat math-homework.txt`
+          value=`cat ./.github/workflows/math-homework.txt`
           echo The result is $value
           
           
-          
-      #- shell: bash
-      #  run: |
-      #    expr 3 + 7 > math-homework.txt
-      #- name: Upload math result for job 1
-      #  uses: actions/upload-artifact@v3
-      #  with:
-      #    name: homework
-      #    path: math-homework.txt
-      #    
-      #- name: cache artifacts
-      #  uses: actions/cache/save@v3
-      #  with:
-      #    path: ./.github/workflows
-      #    key: my-test-cache-example
+      
