@@ -14,38 +14,39 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     # if: contains(github.event.head_commit.message, '--minor')
-    steps:         
-      - name: Restore cached Primes
-        id: cache-primes-restore
-        uses: actions/cache/restore@v3.0.2
-        with:
-          path: .
-          key: my-test-cache-example
-          
-      - name: Download math result for job 2
-        uses: actions/download-artifact@v3
-        with:
-          name: homework
-      - name: Print the final result
-        shell: bash
-        run: |
-          value=`cat math-homework.txt`
-          echo The result is $value
-          
-          
-          
-      #- shell: bash
-      #  run: |
-      #    expr 3 + 7 > math-homework.txt
-      #- name: Upload math result for job 1
-      #  uses: actions/upload-artifact@v3
-      #  with:
-      #    name: homework
-      #    path: math-homework.txt
-          
-      #- name: cache artifacts
-      #  uses: actions/cache@v3.0.2
+    steps:        
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      #- name: Restore cached Primes
+      #  id: cache-primes-restore
+      #  uses: actions/cache/restore@v3
       #  with:
       #    path: math-cache
       #    key: my-test-cache-example
-      #    - name: Restore cached Primes
+      #    
+      #- name: Download math result for job 2
+      #  uses: actions/download-artifact@v3
+      #  with:
+      #    name: homework
+      #- name: Print the final result
+      #  shell: bash
+      #  run: |
+      #    value=`cat math-homework.txt`
+      #    echo The result is $value
+          
+          
+          
+      - shell: bash
+        run: |
+          expr 3 + 7 > math-homework.txt
+      - name: Upload math result for job 1
+        uses: actions/upload-artifact@v3
+        with:
+          name: homework
+          path: math-homework.txt
+          
+      - name: cache artifacts
+        uses: actions/cache@v3
+        with:
+          path: math-cache
+          key: my-test-cache-example
