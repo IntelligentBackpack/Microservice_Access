@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Test
 
 on:
@@ -17,35 +15,17 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     if: contains(github.event.head_commit.message, '--minor')
     steps:         
-      - name: Get a persistent value
-        id: get_persistent_value_before
-        uses: aaimio/get-persistent-value@v1.2.1
-        with:
-          key: foo
-          access_token: ${{ secrets.PERSISTENT_VALUE_ACCESS_TOKEN }}
-      - name: Some other step
+      - name: Compute resources
         run: |
-          echo "value of foo: ${{ steps.get_persistent_value.outputs.value }}"
-          echo "VERSION=${{ steps.get_persistent_value.outputs.value }}" >> $GITHUB_ENV
-          
-    
+          MAGIC_NUMBER=42
+          echo "Found universal answer: $MAGIC_NUMBER"
+          echo "Exporting it as ENV variable..."
+          echo "MAGIC_NUMBER=$MAGIC_NUMBER" >> $GITHUB_ENV
 
-      - name: Set a persistent value
-        id: set_persistent_value
-        uses: aaimio/set-persistent-value@v1.2.1
+      # XXX We recommend to export all your variables at once, at the end of your job
+      - name: Export variable MAGIC_NUMBER for next jobs
+        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
         with:
-          key: foo
-          value: 0
-          access_token: ${{ secrets.PERSISTENT_VALUE_ACCESS_TOKEN }}
-          
-
-
-      - name: Get a persistent value
-        id: get_persistent_value
-        uses: aaimio/get-persistent-value@v1.2.1
-        with:
-          key: foo
-          access_token: ${{ secrets.PERSISTENT_VALUE_ACCESS_TOKEN }}
-      - name: Some other step
-        run: |
-          echo "found at the end: ${{ steps.get_persistent_value.outputs.value }}"
+          # Persist (store) our MAGIC_NUMBER ENV variable into our store, for the next jobs
+          variables: |
+            MAGIC_NUMBER=${{ env.MAGIC_NUMBER }}
