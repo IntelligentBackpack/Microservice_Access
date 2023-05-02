@@ -25,5 +25,10 @@ jobs:
       with:
         version: ${{ steps.previoustag.outputs.tag }}
         
+    - name: Sleep for 5 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '5s'
+
     - name: "Write Previus tag:"
       run: git describe --tags --abbrev=0
