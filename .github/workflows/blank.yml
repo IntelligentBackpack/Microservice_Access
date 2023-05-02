@@ -15,17 +15,12 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     if: contains(github.event.head_commit.message, '--minor')
     steps:         
-      - name: Compute resources
-        run: |
-          MAGIC_NUMBER=42
-          echo "Found universal answer: $MAGIC_NUMBER"
-          echo "Exporting it as ENV variable..."
-          echo "MAGIC_NUMBER=$MAGIC_NUMBER" >> $GITHUB_ENV
-
-      # XXX We recommend to export all your variables at once, at the end of your job
-      - name: Export variable MAGIC_NUMBER for next jobs
+      - name: Import variable MAGIC_NUMBER
         uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
         with:
-          # Persist (store) our MAGIC_NUMBER ENV variable into our store, for the next jobs
+          # List all variables you want to retrieve from the store
+          # XXX They'll be automatically added to your ENV
           variables: |
-            MAGIC_NUMBER=${{ env.MAGIC_NUMBER }}
+            MAGIC_NUMBER
+      - name: Debug output
+        run: echo "We have access to $MAGIC_NUMBER"
