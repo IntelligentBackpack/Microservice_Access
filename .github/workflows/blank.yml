@@ -15,12 +15,11 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     if: contains(github.event.head_commit.message, '--minor')
     steps:         
-      - name: Import variable MAGIC_NUMBER
-        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
+      - shell: bash
+        run: |
+          expr 3 + 7 > math-homework.txt
+      - name: Upload math result for job 1
+        uses: actions/upload-artifact@v3
         with:
-          # List all variables you want to retrieve from the store
-          # XXX They'll be automatically added to your ENV
-          variables: |
-            MAGIC_NUMBER
-      - name: Debug output
-        run: echo "We have access to $MAGIC_NUMBER"
+          name: homework
+          path: math-homework.txt
