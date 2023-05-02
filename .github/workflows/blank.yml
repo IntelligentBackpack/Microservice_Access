@@ -26,11 +26,14 @@ jobs:
             Hello World!
           write-mode: append
             
-      - name: Commit & Push
-        uses: Andro999b/push@v1.3
+      - name: Commit files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "Add changes"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.WORKFLOW_TOKEN }}
-          branch: develop
-          message: 'Overwritten by Github Actions'
+          branch: ${{ github.head_ref }}
           
       
