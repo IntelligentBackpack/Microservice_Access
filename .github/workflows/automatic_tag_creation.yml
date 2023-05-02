@@ -15,9 +15,10 @@ jobs:
       with:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-    #- uses: "marvinpinto/action-automatic-releases@latest"
-    #  with:
-    #    repo_token: "${{ secrets.GITHUB_TOKEN }}"
-    #    prerelease: false
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "${{ steps.create_tag.outputs.tagname }}"
+        prerelease: false
     - name: "Write Previus tag:"
       run: echo "${{ steps.create_tag.outputs.tagname }}"
