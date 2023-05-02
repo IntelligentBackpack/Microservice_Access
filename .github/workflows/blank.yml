@@ -28,10 +28,10 @@ jobs:
       - name: Overwrite file
         uses: "DamianReeves/write-file-action@master"
         with:
-          path: path/to/file.js
+          path: ./.github/workflows/artifact.txt
           write-mode: overwrite
           contents: |
-            console.log('some contents')
+            Hello World!
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
