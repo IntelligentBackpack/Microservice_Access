@@ -17,8 +17,14 @@ export function defaultUser(): User {
 }
 
 export function assignVals_JSON(json: any): User {
-    const user: User = {email: json.email, password: json.password, nome: json.nome, cognome: json.cognome, 
+    var user: User = {email: json.email, password: json.password, nome: json.nome, cognome: json.cognome, 
                         istituto: json.istituto, ruolo: json.ruolo, classe: json.classe};
+    return user;
+}
+
+export function assignVals_DB(Json: any): User {
+    var user: User = {email: Json.Email, password: Json.Password, nome: Json.Nome, cognome: Json.Cognome, 
+                        istituto: Json.Istituto, ruolo: Json.Ruolo, classe: Json.Classe};
     return user;
 }
 
