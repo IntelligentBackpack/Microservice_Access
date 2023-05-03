@@ -48,7 +48,6 @@ describe('Testing register routing', function() {
     })
 });
 
-
 describe('Testing login routing', function() {
     it("should login a user", async() => {
         //request
@@ -56,6 +55,10 @@ describe('Testing login routing', function() {
         //recive
         expect(serverResponse.statusCode).toBe(200)
         expect(serverResponse.body.message).toBe("Confirmed login.")
+        expect(serverResponse.body.user.email).toBe(userGood.email)
+        expect(serverResponse.body.user.password).toBe(userGood.password)
+        expect(serverResponse.body.user.nome).toBe(userGood.nome)
+        expect(serverResponse.body.user.cognome).toBe(userGood.cognome)
     })
 
     it("should should fail the login", async() => {

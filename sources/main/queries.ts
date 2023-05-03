@@ -29,18 +29,21 @@ export async function findUserWithEmail(email: String): Promise<userI.User> {
     return user; //return back all the found values
 }
 
-export async function login(email: string, password: string): Promise<boolean> {
+export async function login(email: string, password: string): Promise<userI.User> {
+    let user: userI.User = userI.defaultUser();
     try {
         var poolConnection = await sql.connect(conf); //connect to the database
         var resultSet:sql.IResult<any> = await poolConnection.request()
                                         .query("select * from Utente where Email = '" + email + "' AND Password = '" + password + "'"); //execute the query
         poolConnection.close(); //close connection with database
         // ouput row contents from default record set
-        return resultSet.rowsAffected[0] == 1
+        resultSet.recordset.forEach(function(row: any) {
+            user = userI.assignVals_DB(row);
+        });
     } catch (e: any) {
         console.error(e);
     }
-    return false;
+    return user;
 }
 
 //il metodo è utilizzato per registrare un utente nella tabella degli utenti
