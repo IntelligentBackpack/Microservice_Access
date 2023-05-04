@@ -63,3 +63,19 @@ router.post('/change_password', async (req: {body: proto.User}, res) => {
 	}
 	res.status(500).send(new proto.UserResponse({ message: "Cannot change password" }).toObject())
 });
+
+
+//TODO FINIRE DI FARE
+router.post('/change_istituto', async (req: {body: proto.UserRequest_Permissions}, res) => {
+
+	if(!await queryAsk.verifyPrivileges_HIGH(req.body.email_Creatore)) {
+		res.status(401).send(new proto.UserResponse({ message: "Istituto changed successfully"}).toObject())
+		return;
+	}
+
+    if(await queryAsk.change_password(userI.assignVals_JSON(req.body))) {
+    	res.status(200).send(new proto.UserResponse({ message: "Confirmed change to password.", user: userI.generate_protoUser(req.body)}).toObject())
+		return;
+	}
+	res.status(500).send(new proto.UserResponse({ message: "Cannot change password" }).toObject())
+});

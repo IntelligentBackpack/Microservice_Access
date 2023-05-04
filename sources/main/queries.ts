@@ -1,5 +1,6 @@
 import sql, { config } from 'mssql';
 import * as userI from './interfaces/User';
+import * as Istituto from './interfaces/Istituto';
 
 const conf: config = {
     user: 'CloudSA665ece82', // better stored in an app setting such as process.env.DB_USER
@@ -20,9 +21,23 @@ export async function findUserWithEmail(email: String): Promise<userI.User> {
                                         .query("select * from Utente where Email = '" + email + "'"); //execute the query
         poolConnection.close(); //close connection with database
         // ouput row contents from default record set
+
+        if(resultSet.rowsAffected[0] == 0)
+            return user;
+
+        var istituto: number = -1;  
+        var data: any;
         resultSet.recordset.forEach(function(row: any) {
-            user = userI.assignVals_JSON(row);
+            data = row;
+            if(row.Istituto_Iscritto != null)
+                istituto = row.Istituto_Iscritto
         });
+        if(istituto > -1) {
+            const ist: Istituto.Istituto = await get_istituto_info(istituto)
+            user = userI.assignVals_DB(data, ist);
+        }
+        else
+            user = userI.assignVals_DB(data);
     } catch (e: any) {
         console.error(e);
     }
@@ -36,10 +51,24 @@ export async function login(email: string, password: string): Promise<userI.User
         var resultSet:sql.IResult<any> = await poolConnection.request()
                                         .query("select * from Utente where Email = '" + email + "' AND Password = '" + password + "'"); //execute the query
         poolConnection.close(); //close connection with database
+
+        if(resultSet.rowsAffected[0] == 0)
+            return user;
         // ouput row contents from default record set
+        var istituto: number = -1;  
+        var data: any;
+
         resultSet.recordset.forEach(function(row: any) {
-            user = userI.assignVals_DB(row);
+            data = row;
+            if(row.Istituto_Iscritto != null)
+                istituto = row.Istituto_Iscritto
         });
+        if(istituto > -1) {
+            const ist: Istituto.Istituto = await get_istituto_info(istituto)
+            user = userI.assignVals_DB(data, ist);
+        }
+        else
+            user = userI.assignVals_DB(data);
     } catch (e: any) {
         console.error(e);
     }
@@ -88,18 +117,20 @@ export async function verifyPrivileges_LOW(emailEsecutore: string): Promise<bool
     return false;
 }
 
-export async function deleteUser(user:userI.User) {
+export async function deleteUser(user:userI.User): Promise<boolean> {
     try {
         var poolConnection = await sql.connect(conf); //connect to the database
         var resultSet:sql.IResult<any> = await poolConnection.request()
                                         .query("Delete from Utente where Email = '" + user.email + "'"); //execute the query
         poolConnection.close(); //close connection with database
+        return true;
     } catch (e: any) {
         console.error(e);
     }
+    return false;
 }
 
-export async function change_name(user:userI.User) {
+export async function change_name(user:userI.User): Promise<boolean> {
     try {
         var poolConnection = await sql.connect(conf); //connect to the database
         var resultSet:sql.IResult<any> = await poolConnection.request()
@@ -112,7 +143,7 @@ export async function change_name(user:userI.User) {
     return false;
 }
 
-export async function change_cognome(user:userI.User) {
+export async function change_cognome(user:userI.User): Promise<boolean> {
     try {
         var poolConnection = await sql.connect(conf); //connect to the database
         var resultSet:sql.IResult<any> = await poolConnection.request()
@@ -125,7 +156,7 @@ export async function change_cognome(user:userI.User) {
     return false;
 }
 
-export async function change_email(email_vecchia: string, email_nuova: string) {
+export async function change_email(email_vecchia: string, email_nuova: string): Promise<boolean> {
     try {
         var poolConnection = await sql.connect(conf); //connect to the database
         var resultSet:sql.IResult<any> = await poolConnection.request()
@@ -138,7 +169,37 @@ export async function change_email(email_vecchia: string, email_nuova: string) {
     return false;
 }
 
-export async function change_password(user:userI.User) {
+export async function change_password(user:userI.User): Promise<boolean> {
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("Update Utente Set Password = '" + user.password + "' Where Email = '" + user.email + "'"); //execute the query
+        poolConnection.close(); //close connection with database
+        return true;
+    } catch (e: any) {
+        console.error(e);
+    }
+    return false;
+}
+
+export async function get_istituto_info(istitutoID: number): Promise<Istituto.Istituto> {
+    let ist: Istituto.Istituto = Istituto.defaultIstituto();
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("select * from Istituto where ID = '" + istitutoID + "'"); //execute the query
+        poolConnection.close(); //close connection with database
+        resultSet.recordset.forEach(function(row: any) {
+            ist = Istituto.assignVals_DB(row);
+        });
+    } catch (e: any) {
+        console.error(e);
+    }
+    return ist;
+}
+
+
+export async function change_istituto(user:userI.User) {
     try {
         var poolConnection = await sql.connect(conf); //connect to the database
         var resultSet:sql.IResult<any> = await poolConnection.request()

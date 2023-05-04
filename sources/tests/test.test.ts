@@ -8,6 +8,7 @@ jest.setTimeout(15000);
 const userBad: proto.User = new proto.User({email: "mario", password: "password", nome: "mario", cognome: "rossi"});
 const userGood: proto.User = new proto.User({email: makeid(15), password: "asdRE7687fds", nome: "mario", cognome: "rossi"});
 
+
 describe('Testing register routing', function() {
     it('Should return an error 400 for bad message format', async() => {
         //data
@@ -145,7 +146,6 @@ describe('Testing remove routing', function() {
         expect(serverResponse.body.message).toBe("User deleted.")
     })
 });
-
 
 
 function makeid(length: number) {
