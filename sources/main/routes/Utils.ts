@@ -2,8 +2,6 @@ import { Router } from 'express';
 import * as protoGen from "../generated/access";
 import * as userI from '../interfaces/User'
 import * as utility from "../utilities"
-
-
 import proto = protoGen.access;
 
 import * as queryAsk from '../queries';
@@ -65,17 +63,43 @@ router.post('/change_password', async (req: {body: proto.User}, res) => {
 });
 
 
-//TODO FINIRE DI FARE
-router.post('/change_istituto', async (req: {body: proto.UserRequest_Permissions}, res) => {
 
-	if(!await queryAsk.verifyPrivileges_HIGH(req.body.email_Creatore)) {
-		res.status(401).send(new proto.UserResponse({ message: "Istituto changed successfully"}).toObject())
+router.post('/change_istituto', async (req: {body: proto.PermissionRequest_ChangeInstitute}, res) => {
+	if(!await queryAsk.verifyPrivileges_HIGH(req.body.email_esecutore)) {
+		res.status(401).send(new proto.UserResponse({ message: "You can't do this."}).toObject())
 		return;
 	}
 
-    if(await queryAsk.change_password(userI.assignVals_JSON(req.body))) {
-    	res.status(200).send(new proto.UserResponse({ message: "Confirmed change to password.", user: userI.generate_protoUser(req.body)}).toObject())
+    if(await queryAsk.change_istituto(req.body.email_utenteFinale, req.body.nuovo_istituto.ID)) {
+    	res.status(200).send(new proto.UserResponse({ message: "Istituto changed successfully."}).toObject())
 		return;
 	}
-	res.status(500).send(new proto.UserResponse({ message: "Cannot change password" }).toObject())
+	res.status(500).send(new proto.UserResponse({ message: "Cannot change istituto." }).toObject())
 });
+
+router.post('/change_ruolo', async (req: {body: proto.PermissionRequest_ChangeRuolo}, res) => {
+	if(!await queryAsk.verifyPrivileges_HIGH(req.body.email_esecutore)) {
+		res.status(401).send(new proto.UserResponse({ message: "You can't do this."}).toObject())
+		return;
+	}
+
+    if(await queryAsk.change_ruolo(req.body.email_utenteFinale, req.body.nuovo_ruolo)) {
+    	res.status(200).send(new proto.UserResponse({ message: "Ruolo changed successfully."}).toObject())
+		return;
+	}
+	res.status(500).send(new proto.UserResponse({ message: "Cannot change ruolo" }).toObject())
+});
+
+router.post('/change_classe', async (req: {body: proto.PermissionRequest_ChangeClasse}, res) => {
+	if(!await queryAsk.verifyPrivileges_HIGH(req.body.email_esecutore)) {
+		res.status(401).send(new proto.UserResponse({ message: "You can't do this."}).toObject())
+		return;
+	}
+
+    if(await queryAsk.change_classe(req.body.email_utenteFinale, req.body.nuova_classe)) {
+    	res.status(200).send(new proto.UserResponse({ message: "Classe changed successfully."}).toObject())
+		return;
+	}
+	res.status(500).send(new proto.UserResponse({ message: "Cannot change classe" }).toObject())
+});
+

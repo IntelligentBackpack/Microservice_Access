@@ -198,12 +198,37 @@ export async function get_istituto_info(istitutoID: number): Promise<Istituto.Is
     return ist;
 }
 
-
-export async function change_istituto(user:userI.User) {
+export async function change_istituto(email: string, ID_istituto: number) {
     try {
         var poolConnection = await sql.connect(conf); //connect to the database
         var resultSet:sql.IResult<any> = await poolConnection.request()
-                                        .query("Update Utente Set Password = '" + user.password + "' Where Email = '" + user.email + "'"); //execute the query
+                                        .query("Update Utente Set Istituto_Iscritto = " + ID_istituto + " Where Email = '" + email + "'"); //execute the query
+        poolConnection.close(); //close connection with database
+        return true;
+    } catch (e: any) {
+        console.error(e);
+    }
+    return false;
+}
+
+export async function change_ruolo(email: string, ruolo: number) {
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("Update Utente Set Ruolo = " + ruolo + " Where Email = '" + email + "'"); //execute the query
+        poolConnection.close(); //close connection with database
+        return true;
+    } catch (e: any) {
+        console.error(e);
+    }
+    return false;
+}
+
+export async function change_classe(email: string, classe: string) {
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("Update Utente Set Classe = '" + classe + "' Where Email = '" + email + "'"); //execute the query
         poolConnection.close(); //close connection with database
         return true;
     } catch (e: any) {
