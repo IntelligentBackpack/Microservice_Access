@@ -19,7 +19,7 @@ router.put('', async (req: {body: proto.User}, res) => {
     }
     const user:userI.User = await queryAsk.findUserWithEmail(req.body.email);
     if(user.email != "") {
-        res.status(400).send(new proto.UserResponse({message: "Email already token."}).toObject())
+        res.status(400).send(new proto.UserResponse({message: "Email already taken."}).toObject())
         return;
     }
     //now check if password have all requirements

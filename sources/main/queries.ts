@@ -198,6 +198,22 @@ export async function get_istituto_info(istitutoID: number): Promise<Istituto.Is
     return ist;
 }
 
+export async function get_istituti(): Promise<Istituto.Istituto[]> {
+    let ists : Istituto.Istituto[] = [];
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("select * from Istituto"); //execute the query
+        poolConnection.close(); //close connection with database
+        resultSet.recordset.forEach(function(row: any) {
+            ists.push(Istituto.assignVals_DB(row))
+        });
+    } catch (e: any) {
+        console.error(e);
+    }
+    return ists;
+}
+
 export async function change_istituto(email: string, ID_istituto: number) {
     try {
         var poolConnection = await sql.connect(conf); //connect to the database

@@ -5,12 +5,27 @@ import * as utility from "../utilities"
 import proto = protoGen.access;
 
 import * as queryAsk from '../queries';
+import * as Istituto from '../interfaces/Istituto';
 const router = Router();
 const re = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$");
 
 export default router;
 
 
+router.get('/get_istituto', async (req: {body: proto.Istituto}, res) => {
+	res.status(200).send(Istituto.generate_protoIstituto(await queryAsk.get_istituto_info(req.body.ID)).toObject())
+	return;
+});
+
+router.get('/get_istituti', async (req: {body: proto.Istituto}, res) => {
+	const istituti: Istituto.Istituto[] = await queryAsk.get_istituti();
+	var protoData: proto.Response_Istituti = new proto.Response_Istituti({})
+	for(let ist of istituti) {
+		protoData.istituti.push(Istituto.generate_protoIstituto(ist))
+	}
+	res.status(200).send(protoData.toObject())
+	return;
+});
 
 
 router.post('/change_nome', async (req: {body: proto.User}, res) => {
