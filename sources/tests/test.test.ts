@@ -7,6 +7,8 @@ jest.setTimeout(15000);
 
 const userBad: proto.User = new proto.User({email: "mario", password: "password", nome: "mario", cognome: "rossi"});
 const userGood: proto.User = new proto.User({email: makeid(15), password: "asdRE7687fds", nome: "mario", cognome: "rossi"});
+const istituto: proto.Istituto = new proto.Istituto({ID: 0, IstitutoNome: "Giulio Cesare", IstitutoCitta: "Marghera"})
+
 
 describe('Testing register routing', function() {
     it('Should return an error 400 for bad message format', async() => {
@@ -136,6 +138,50 @@ describe('testing utility routing', function() {
     })
 })
 
+describe('testing utility permissions funcitons', function() {
+    it("should change istituto to user", async () => {
+        const serverResponse = await request(app).post('/utility/change_istituto').send((
+            new proto.PermissionRequest_ChangeInstitute({email_esecutore: "admin", email_utenteFinale: userGood.email, nuovo_istituto: istituto}).toObject()));
+        expect(serverResponse.statusCode).toBe(200)
+        expect(serverResponse.body.message).toBe("Istituto changed successfully.")
+    })
+
+    it("should give error 401 for no permissions in change istituto", async () => {
+        const serverResponse = await request(app).post('/utility/change_istituto').send((
+            new proto.PermissionRequest_ChangeInstitute({email_esecutore: userGood.email, email_utenteFinale: userGood.email, nuovo_istituto: istituto}).toObject()));
+        expect(serverResponse.statusCode).toBe(401)
+        expect(serverResponse.body.message).toBe("You can't do this.")
+    })
+
+    it("should change ruolo to user", async () => {
+        const serverResponse = await request(app).post('/utility/change_ruolo').send((
+            new proto.PermissionRequest_ChangeRuolo({email_esecutore: "admin", email_utenteFinale: userGood.email, nuovo_ruolo: 1}).toObject()));
+        expect(serverResponse.statusCode).toBe(200)
+        expect(serverResponse.body.message).toBe("Ruolo changed successfully.")
+    })
+
+    it("should give error 401 for no permissions in change ruolo", async () => {
+        const serverResponse = await request(app).post('/utility/change_ruolo').send((
+            new proto.PermissionRequest_ChangeRuolo({email_esecutore: userGood.email, email_utenteFinale: userGood.email, nuovo_ruolo: 2}).toObject()));
+        expect(serverResponse.statusCode).toBe(401)
+        expect(serverResponse.body.message).toBe("You can't do this.")
+    })
+
+    it("should change classe to user", async () => {
+        const serverResponse = await request(app).post('/utility/change_classe').send((
+            new proto.PermissionRequest_ChangeClasse({email_esecutore: "admin", email_utenteFinale: userGood.email, nuova_classe: "5C"}).toObject()));
+        expect(serverResponse.statusCode).toBe(200)
+        expect(serverResponse.body.message).toBe("Classe changed successfully.")
+    })
+
+    it("should give error 401 for no permissions in change classe", async () => {
+        const serverResponse = await request(app).post('/utility/change_classe').send((
+            new proto.PermissionRequest_ChangeClasse({email_esecutore: userGood.email, email_utenteFinale: userGood.email, nuova_classe: "4C"}).toObject()));
+        expect(serverResponse.statusCode).toBe(401)
+        expect(serverResponse.body.message).toBe("You can't do this.")
+    })
+})
+
 describe('Testing remove routing', function() {
     it("should delete a user", async() => {
         //request
@@ -145,7 +191,6 @@ describe('Testing remove routing', function() {
         expect(serverResponse.body.message).toBe("User deleted.")
     })
 });
-
 
 
 function makeid(length: number) {

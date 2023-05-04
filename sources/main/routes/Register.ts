@@ -4,7 +4,7 @@ import * as protoGen from "../generated/access";
 import * as utility from "../utilities"
 import proto = protoGen.access;
 
-const queryAsk = require('../queries');
+import * as queryAsk from '../queries';
 const router = Router();
 const re = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$");
 export default router;
@@ -17,7 +17,6 @@ router.put('', async (req: {body: proto.User}, res) => {
         res.status(400).send(new proto.UserResponse({message: "Message wrong formatted. Require Email, Password, Nome, Cognome fields."}).toObject())
         return;
     }
-    
     const user:userI.User = await queryAsk.findUserWithEmail(req.body.email);
     if(user.email != "") {
         res.status(400).send(new proto.UserResponse({message: "Email already token."}).toObject())
