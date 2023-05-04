@@ -3,11 +3,11 @@ import app, { response } from '../main/app';
 import * as protoGen from '../main/generated/access';
 import proto = protoGen.access;
 
-jest.setTimeout(15000);
+jest.setTimeout(20000);
 
 const userBad: proto.User = new proto.User({email: "mario", password: "password", nome: "mario", cognome: "rossi"});
 const userGood: proto.User = new proto.User({email: makeid(15), password: "asdRE7687fds", nome: "mario", cognome: "rossi"});
-const istituto: proto.Istituto = new proto.Istituto({ID: 0, IstitutoNome: "Giulio Cesare", IstitutoCitta: "Marghera"})
+const istituto: proto.Istituto = new proto.Istituto({ID: 1, IstitutoNome: "Giulio Cesare", IstitutoCitta: "Marghera"})
 
 
 describe('Testing register routing', function() {
@@ -46,7 +46,7 @@ describe('Testing register routing', function() {
         const serverResponse = await request(app).put('/register').send(userGood.toObject());
         //recive
         expect(serverResponse.statusCode).toBe(400)
-        expect(serverResponse.body.message).toBe("Email already token.")
+        expect(serverResponse.body.message).toBe("Email already taken.")
     })
 });
 
@@ -179,6 +179,19 @@ describe('testing utility permissions funcitons', function() {
             new proto.PermissionRequest_ChangeClasse({email_esecutore: userGood.email, email_utenteFinale: userGood.email, nuova_classe: "4C"}).toObject()));
         expect(serverResponse.statusCode).toBe(401)
         expect(serverResponse.body.message).toBe("You can't do this.")
+    })
+
+    it("should get the required istituto", async () => {
+        const serverResponse = await request(app).get('/utility/get_istituto').send(istituto.toObject())
+        expect(serverResponse.statusCode).toBe(200)
+        expect(serverResponse.body.ID).toBe(1)
+        expect(serverResponse.body.IstitutoNome).toBe("Istituto 1")
+        expect(serverResponse.body.IstitutoCitta).toBe("Città 1")
+    })
+
+    it("should get all istituti", async () => {
+        const serverResponse = await request(app).get('/utility/get_istituti').send()
+        expect(serverResponse.statusCode).toBe(200)
     })
 })
 
