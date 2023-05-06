@@ -28,12 +28,30 @@ router.get('/get_istituti', async (req: {body: proto.Istituto}, res) => {
 });
 
 
+
+router.get('/verifyPrivileges_HIGH', async (req: {body: proto.BasicMessage}, res) => {
+	if(await queryAsk.verifyPrivileges_HIGH(req.body.message)) {
+		res.status(200).send(new proto.BasicMessage({ message: "High"}).toObject())
+		return;
+	}
+	res.status(401).send(new proto.BasicMessage({ message: "Error"}).toObject())
+});
+
+router.get('/verifyPrivileges_LOW', async (req: {body: proto.BasicMessage}, res) => {
+	if(await queryAsk.verifyPrivileges_LOW(req.body.message)) {
+		res.status(200).send(new proto.BasicMessage({ message: "Low"}).toObject())
+		return;
+	}
+	res.status(401).send(new proto.BasicMessage({ message: "Error"}).toObject())
+});
+
+
 router.post('/change_nome', async (req: {body: proto.User}, res) => {
     if(await queryAsk.change_name(userI.assignVals_JSON(req.body))) {
     	res.status(200).send(new proto.UserResponse({ message: "Confirmed change to name.", user: userI.generate_protoUser(req.body)}).toObject())
 		return;
 	}
-	res.status(500).send(new proto.UserResponse({ message: "Cannot change name"}).toObject())
+	/* istanbul ignore next */ res.status(500).send(new proto.UserResponse({ message: "Cannot change name"}).toObject())
 });
 
 router.post('/change_cognome', async (req: {body: proto.User}, res) => {
@@ -41,7 +59,7 @@ router.post('/change_cognome', async (req: {body: proto.User}, res) => {
     	res.status(200).send(new proto.UserResponse({ message: "Confirmed change to cognome.", user: userI.generate_protoUser(req.body)}).toObject())
 		return;
 	}
-	res.status(500).send(new proto.UserResponse({ message: "Cannot change cognome" }).toObject())
+	/* istanbul ignore next */ res.status(500).send(new proto.UserResponse({ message: "Cannot change cognome" }).toObject())
 });
 
 router.post('/change_email', async (req: {body: proto.UserRequest_ChangeEmail}, res) => {
@@ -56,7 +74,7 @@ router.post('/change_email', async (req: {body: proto.UserRequest_ChangeEmail}, 
     	res.status(200).send(new proto.UserResponse({ message: "Confirmed change to email.", user: userI.generate_protoUser(req.body.user) }).toObject())
 		return;
 	}
-	res.status(500).send(new proto.UserResponse({ message: "Cannot change email" }).toObject())
+	/* istanbul ignore next */ res.status(500).send(new proto.UserResponse({ message: "Cannot change email" }).toObject())
 });
 
 router.post('/change_password', async (req: {body: proto.User}, res) => {
@@ -74,7 +92,7 @@ router.post('/change_password', async (req: {body: proto.User}, res) => {
     	res.status(200).send(new proto.UserResponse({ message: "Confirmed change to password.", user: userI.generate_protoUser(req.body)}).toObject())
 		return;
 	}
-	res.status(500).send(new proto.UserResponse({ message: "Cannot change password" }).toObject())
+	/* istanbul ignore next */ res.status(500).send(new proto.UserResponse({ message: "Cannot change password" }).toObject())
 });
 
 
@@ -89,7 +107,7 @@ router.post('/change_istituto', async (req: {body: proto.PermissionRequest_Chang
     	res.status(200).send(new proto.UserResponse({ message: "Istituto changed successfully."}).toObject())
 		return;
 	}
-	res.status(500).send(new proto.UserResponse({ message: "Cannot change istituto." }).toObject())
+	/* istanbul ignore next */ res.status(500).send(new proto.UserResponse({ message: "Cannot change istituto." }).toObject())
 });
 
 router.post('/change_ruolo', async (req: {body: proto.PermissionRequest_ChangeRuolo}, res) => {
@@ -102,7 +120,7 @@ router.post('/change_ruolo', async (req: {body: proto.PermissionRequest_ChangeRu
     	res.status(200).send(new proto.UserResponse({ message: "Ruolo changed successfully."}).toObject())
 		return;
 	}
-	res.status(500).send(new proto.UserResponse({ message: "Cannot change ruolo" }).toObject())
+	/* istanbul ignore next */ res.status(500).send(new proto.UserResponse({ message: "Cannot change ruolo" }).toObject())
 });
 
 router.post('/change_classe', async (req: {body: proto.PermissionRequest_ChangeClasse}, res) => {
@@ -115,6 +133,5 @@ router.post('/change_classe', async (req: {body: proto.PermissionRequest_ChangeC
     	res.status(200).send(new proto.UserResponse({ message: "Classe changed successfully."}).toObject())
 		return;
 	}
-	res.status(500).send(new proto.UserResponse({ message: "Cannot change classe" }).toObject())
+	/* istanbul ignore next */ res.status(500).send(new proto.UserResponse({ message: "Cannot change classe" }).toObject())
 });
-

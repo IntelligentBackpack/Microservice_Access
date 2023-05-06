@@ -1,6 +1,6 @@
 {
   "name": "microservice_access",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "This repo contain the code about the microservice related to the access authentication and role changing in the system",
   "main": "sources/build/main/index.js",
   "scripts": {

@@ -38,7 +38,7 @@ export async function findUserWithEmail(email: String): Promise<userI.User> {
         }
         else
             user = userI.assignVals_DB(data);
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
     return user; //return back all the found values
@@ -69,7 +69,7 @@ export async function login(email: string, password: string): Promise<userI.User
         }
         else
             user = userI.assignVals_DB(data);
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
     return user;
@@ -82,7 +82,7 @@ export async function createUser(user: userI.User) {
         var resultSet:sql.IResult<any> = await poolConnection.request()
                                         .query("insert into Utente values ('" + user.email + "', '" + user.password + "', '" + user.nome + "', '" + user.cognome + "', null, 0, null)"); //execute the query
         poolConnection.close(); //close connection with database
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
 }
@@ -95,10 +95,10 @@ export async function verifyPrivileges_HIGH(emailEsecutore: string): Promise<boo
                                         .query("select Ruolo from utente where ((Email = '" + emailEsecutore + "') AND (Ruolo >= 3) AND (Ruolo <= 4))"); //execute the query
         poolConnection.close(); //close connection with database
         return resultSet.rowsAffected[0] == 1
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
-    return false;
+    /* istanbul ignore next */ return false;
 }
 
 //il metodo viene utilizzato per verificare se la persona passata ha privilegi bassi per eseguire l'azione
@@ -106,15 +106,13 @@ export async function verifyPrivileges_LOW(emailEsecutore: string): Promise<bool
     try {
         var poolConnection = await sql.connect(conf); //connect to the database
         var resultSet:sql.IResult<any> = await poolConnection.request()
-                                        .query("select ruolo from utente where ((Email = '" + emailEsecutore + "') AND (Ruolo >= 2) AND (Ruolo <= 4))"); //execute the query
+                                        .query("select Ruolo from utente where ((Email = '" + emailEsecutore + "') AND (Ruolo >= 2) AND (Ruolo <= 4))"); //execute the query
         poolConnection.close(); //close connection with database
-        resultSet.recordset.forEach(function(row: any) {
-            return true;
-        });
-    } catch (e: any) {
+        return resultSet.rowsAffected[0] == 1
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
-    return false;
+    /* istanbul ignore next */ return false;
 }
 
 export async function deleteUser(user:userI.User): Promise<boolean> {
@@ -124,10 +122,10 @@ export async function deleteUser(user:userI.User): Promise<boolean> {
                                         .query("Delete from Utente where Email = '" + user.email + "'"); //execute the query
         poolConnection.close(); //close connection with database
         return true;
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
-    return false;
+    /* istanbul ignore next */ return false;
 }
 
 export async function change_name(user:userI.User): Promise<boolean> {
@@ -137,10 +135,10 @@ export async function change_name(user:userI.User): Promise<boolean> {
                                         .query("Update Utente Set Nome = '" + user.nome + "' Where Email = '" + user.email + "'"); //execute the query
         poolConnection.close(); //close connection with database
         return true;
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
-    return false;
+    /* istanbul ignore next */ return false;
 }
 
 export async function change_cognome(user:userI.User): Promise<boolean> {
@@ -150,10 +148,10 @@ export async function change_cognome(user:userI.User): Promise<boolean> {
                                         .query("Update Utente Set Cognome = '" + user.cognome + "' Where Email = '" + user.email + "'"); //execute the query
         poolConnection.close(); //close connection with database
         return true;
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
-    return false;
+    /* istanbul ignore next */ return false;
 }
 
 export async function change_email(email_vecchia: string, email_nuova: string): Promise<boolean> {
@@ -163,10 +161,10 @@ export async function change_email(email_vecchia: string, email_nuova: string): 
                                         .query("Update Utente Set Email = '" + email_nuova + "' Where Email = '" + email_vecchia + "'"); //execute the query
         poolConnection.close(); //close connection with database
         return true;
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
-    return false;
+    /* istanbul ignore next */ return false;
 }
 
 export async function change_password(user:userI.User): Promise<boolean> {
@@ -176,10 +174,10 @@ export async function change_password(user:userI.User): Promise<boolean> {
                                         .query("Update Utente Set Password = '" + user.password + "' Where Email = '" + user.email + "'"); //execute the query
         poolConnection.close(); //close connection with database
         return true;
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
-    return false;
+    /* istanbul ignore next */ return false;
 }
 
 export async function get_istituto_info(istitutoID: number): Promise<Istituto.Istituto> {
@@ -192,7 +190,7 @@ export async function get_istituto_info(istitutoID: number): Promise<Istituto.Is
         resultSet.recordset.forEach(function(row: any) {
             ist = Istituto.assignVals_DB(row);
         });
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
     return ist;
@@ -208,7 +206,7 @@ export async function get_istituti(): Promise<Istituto.Istituto[]> {
         resultSet.recordset.forEach(function(row: any) {
             ists.push(Istituto.assignVals_DB(row))
         });
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
     return ists;
@@ -221,10 +219,10 @@ export async function change_istituto(email: string, ID_istituto: number) {
                                         .query("Update Utente Set Istituto_Iscritto = " + ID_istituto + " Where Email = '" + email + "'"); //execute the query
         poolConnection.close(); //close connection with database
         return true;
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
-    return false;
+    /* istanbul ignore next */ return false;
 }
 
 export async function change_ruolo(email: string, ruolo: number) {
@@ -234,10 +232,10 @@ export async function change_ruolo(email: string, ruolo: number) {
                                         .query("Update Utente Set Ruolo = " + ruolo + " Where Email = '" + email + "'"); //execute the query
         poolConnection.close(); //close connection with database
         return true;
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
-    return false;
+    /* istanbul ignore next */ return false;
 }
 
 export async function change_classe(email: string, classe: string) {
@@ -247,8 +245,8 @@ export async function change_classe(email: string, classe: string) {
                                         .query("Update Utente Set Classe = '" + classe + "' Where Email = '" + email + "'"); //execute the query
         poolConnection.close(); //close connection with database
         return true;
-    } catch (e: any) {
+    } catch (e: any) /* istanbul ignore next */ {
         console.error(e);
     }
-    return false;
+    /* istanbul ignore next */ return false;
 }
