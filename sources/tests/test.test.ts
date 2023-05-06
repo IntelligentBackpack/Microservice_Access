@@ -138,27 +138,27 @@ describe('testing utility routing', function() {
     })
 
     it("should pass the request HIGH privileges", async () => {
-        const serverResponse = await request(app).get('/utility/verifyPrivileges_HIGH').send(new proto.BasicMessage({message: "admin"}).toObject());
+        const serverResponse = await request(app).get('/utility/verifyPrivileges_HIGH').query({ email: 'admin' });
         expect(serverResponse.statusCode).toBe(200)
         expect(serverResponse.body.message).toBe("High")
     })
 
     
     it("should give error for the request HIGH privileges", async () => {
-        const serverResponse = await request(app).get('/utility/verifyPrivileges_HIGH').send(new proto.BasicMessage({message: "Gesù"}).toObject());
+        const serverResponse = await request(app).get('/utility/verifyPrivileges_HIGH').query({ email: 'gesù' });
         expect(serverResponse.statusCode).toBe(401)
         expect(serverResponse.body.message).toBe("Error")
     })
 
     it("should pass the request LOW privileges", async () => {
-        const serverResponse = await request(app).get('/utility/verifyPrivileges_LOW').send(new proto.BasicMessage({message: "admin"}).toObject());
+        const serverResponse = await request(app).get('/utility/verifyPrivileges_LOW').query({ email: 'admin' });
         expect(serverResponse.statusCode).toBe(200)
         expect(serverResponse.body.message).toBe("Low")
     })
 
     
     it("should give error for the request LOW privileges", async () => {
-        const serverResponse = await request(app).get('/utility/verifyPrivileges_LOW').send(new proto.BasicMessage({message: "Gesù"}).toObject());
+        const serverResponse = await request(app).get('/utility/verifyPrivileges_LOW').query({ email: 'gesù' });
         expect(serverResponse.statusCode).toBe(401)
         expect(serverResponse.body.message).toBe("Error")
     })
@@ -208,11 +208,16 @@ describe('testing utility permissions funcitons', function() {
     })
 
     it("should get the required istituto", async () => {
-        const serverResponse = await request(app).get('/utility/get_istituto').send(istituto.toObject())
+        const serverResponse = await request(app).get('/utility/get_istituto').query({ id:"1"})
         expect(serverResponse.statusCode).toBe(200)
         expect(serverResponse.body.ID).toBe(1)
         expect(serverResponse.body.IstitutoNome).toBe("Istituto 1")
         expect(serverResponse.body.IstitutoCitta).toBe("Città 1")
+    })
+
+    it("should return only 200 for void istituto id", async () => {
+        const serverResponse = await request(app).get('/utility/get_istituto').send()
+        expect(serverResponse.statusCode).toBe(200)
     })
 
     it("should get all istituti", async () => {

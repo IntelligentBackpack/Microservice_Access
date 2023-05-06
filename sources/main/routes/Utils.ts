@@ -12,12 +12,16 @@ const re = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$");
 export default router;
 
 
-router.get('/get_istituto', async (req: {body: proto.Istituto}, res) => {
-	res.status(200).send(Istituto.generate_protoIstituto(await queryAsk.get_istituto_info(req.body.ID)).toObject())
+router.get('/get_istituto', async (req, res) => {
+	if(req.query.id == undefined) {
+		res.status(200).send();
+		return;
+	}
+	res.status(200).send(Istituto.generate_protoIstituto(await queryAsk.get_istituto_info(+req.query.id)).toObject())
 	return;
 });
 
-router.get('/get_istituti', async (req: {body: proto.Istituto}, res) => {
+router.get('/get_istituti', async (req, res) => {
 	const istituti: Istituto.Istituto[] = await queryAsk.get_istituti();
 	var protoData: proto.Response_Istituti = new proto.Response_Istituti({})
 	for(let ist of istituti) {
@@ -29,16 +33,24 @@ router.get('/get_istituti', async (req: {body: proto.Istituto}, res) => {
 
 
 
-router.get('/verifyPrivileges_HIGH', async (req: {body: proto.BasicMessage}, res) => {
-	if(await queryAsk.verifyPrivileges_HIGH(req.body.message)) {
+router.get('/verifyPrivileges_HIGH', async (req, res) => {
+	if(req.query.email == undefined) {
+		res.status(401).send(new proto.BasicMessage({ message: "Error"}).toObject())
+		return;
+	}
+	if(await queryAsk.verifyPrivileges_HIGH(req.query.email.toString())) {
 		res.status(200).send(new proto.BasicMessage({ message: "High"}).toObject())
 		return;
 	}
 	res.status(401).send(new proto.BasicMessage({ message: "Error"}).toObject())
 });
 
-router.get('/verifyPrivileges_LOW', async (req: {body: proto.BasicMessage}, res) => {
-	if(await queryAsk.verifyPrivileges_LOW(req.body.message)) {
+router.get('/verifyPrivileges_LOW', async (req, res) => {
+	if(req.query.email == undefined) {
+		res.status(401).send(new proto.BasicMessage({ message: "Error"}).toObject())
+		return;
+	}
+	if(await queryAsk.verifyPrivileges_LOW(req.query.email.toString())) {
 		res.status(200).send(new proto.BasicMessage({ message: "Low"}).toObject())
 		return;
 	}
