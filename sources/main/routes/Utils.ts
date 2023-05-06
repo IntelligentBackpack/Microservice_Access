@@ -28,6 +28,24 @@ router.get('/get_istituti', async (req: {body: proto.Istituto}, res) => {
 });
 
 
+
+router.get('/verifyPrivileges_HIGH', async (req: {body: proto.BasicMessage}, res) => {
+	if(await queryAsk.verifyPrivileges_HIGH(req.body.message)) {
+		res.status(200).send(new proto.BasicMessage({ message: "High"}).toObject())
+		return;
+	}
+	res.status(401).send(new proto.BasicMessage({ message: "Error"}).toObject())
+});
+
+router.get('/verifyPrivileges_LOW', async (req: {body: proto.BasicMessage}, res) => {
+	if(await queryAsk.verifyPrivileges_LOW(req.body.message)) {
+		res.status(200).send(new proto.BasicMessage({ message: "Low"}).toObject())
+		return;
+	}
+	res.status(401).send(new proto.BasicMessage({ message: "Error"}).toObject())
+});
+
+
 router.post('/change_nome', async (req: {body: proto.User}, res) => {
     if(await queryAsk.change_name(userI.assignVals_JSON(req.body))) {
     	res.status(200).send(new proto.UserResponse({ message: "Confirmed change to name.", user: userI.generate_protoUser(req.body)}).toObject())
@@ -117,4 +135,3 @@ router.post('/change_classe', async (req: {body: proto.PermissionRequest_ChangeC
 	}
 	res.status(500).send(new proto.UserResponse({ message: "Cannot change classe" }).toObject())
 });
-
