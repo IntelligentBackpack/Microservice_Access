@@ -136,6 +136,32 @@ describe('testing utility routing', function() {
         expect(serverResponse.body.user.nome).toBe(userGood.nome)
         expect(serverResponse.body.user.cognome).toBe(userGood.cognome)
     })
+
+    it("should pass the request HIGH privileges", async () => {
+        const serverResponse = await request(app).get('/utility/verifyPrivileges_HIGH').send(new proto.BasicMessage({message: "admin"}).toObject());
+        expect(serverResponse.statusCode).toBe(200)
+        expect(serverResponse.body.message).toBe("High")
+    })
+
+    
+    it("should give error for the request HIGH privileges", async () => {
+        const serverResponse = await request(app).get('/utility/verifyPrivileges_HIGH').send(new proto.BasicMessage({message: "Gesù"}).toObject());
+        expect(serverResponse.statusCode).toBe(401)
+        expect(serverResponse.body.message).toBe("Error")
+    })
+
+    it("should pass the request LOW privileges", async () => {
+        const serverResponse = await request(app).get('/utility/verifyPrivileges_LOW').send(new proto.BasicMessage({message: "admin"}).toObject());
+        expect(serverResponse.statusCode).toBe(200)
+        expect(serverResponse.body.message).toBe("Low")
+    })
+
+    
+    it("should give error for the request LOW privileges", async () => {
+        const serverResponse = await request(app).get('/utility/verifyPrivileges_LOW').send(new proto.BasicMessage({message: "Gesù"}).toObject());
+        expect(serverResponse.statusCode).toBe(401)
+        expect(serverResponse.body.message).toBe("Error")
+    })
 })
 
 describe('testing utility permissions funcitons', function() {
