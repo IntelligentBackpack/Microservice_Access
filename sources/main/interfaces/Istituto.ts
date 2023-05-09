@@ -35,3 +35,7 @@ export function verify_Basic_DataPresence(json: any): boolean {
 export function toString(ist: Istituto): string {
     return " ISTITUTO ID: " + ist.ID + " ISTITUTO NOME: " + ist.IstitutoNome + " ISTITUTO CITTA: " + ist.IstitutoCitta
 }
+
+export function isAssigned(ist: Istituto): boolean {
+    return ist.ID != -1 && ist.IstitutoNome != "" && ist.IstitutoCitta != ""
+}

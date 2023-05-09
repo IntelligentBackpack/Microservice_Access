@@ -41,3 +41,7 @@ export function verify_Basic_DataPresence(json: any): boolean {
 export function toString(user: User): string {    
     return "EMAIL: " + user.email + " PASSWORD: " + user.password + " NOME: " + user.nome + " COGNOME: " + user.cognome + " ISTITUTO ID: " + user.istituto?.ID + " ISTITUTO NOME: " + user.istituto?.IstitutoNome + " ISTITUTO CITTA: " + user.istituto?.IstitutoCitta + " RUOLO: " + user.ruolo + " CLASSE: " + user.classe
 }
+
+export function isAssigned(user: User): boolean {
+    return user.email != "" && user.password != "" && user.nome != "" && user.cognome != ""
+}
