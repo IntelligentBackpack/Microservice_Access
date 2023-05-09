@@ -6,6 +6,7 @@ import proto = protoGen.access;
 
 import * as queryAsk from '../queries';
 import * as Istituto from '../interfaces/Istituto';
+import * as User from '../interfaces/User'
 const router = Router();
 const re = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$");
 
@@ -14,7 +15,7 @@ export default router;
 
 router.get('/get_istituto', async (req, res) => {
 	if(req.query.id == undefined) {
-		res.status(200).send();
+		res.status(200).send(Istituto.generate_protoIstituto(Istituto.defaultIstituto()).toObject());
 		return;
 	}
 	res.status(200).send(Istituto.generate_protoIstituto(await queryAsk.get_istituto_info(+req.query.id)).toObject())
@@ -31,6 +32,14 @@ router.get('/get_istituti', async (req, res) => {
 	return;
 });
 
+router.get('/emailExists', async (req, res) => {
+	if(req.query.email == undefined) {
+		res.status(200).send(User.generate_protoUser(User.defaultUser()).toObject());
+		return;
+	}
+	res.status(200).send(User.generate_protoUser(await queryAsk.findUserWithEmail(req.query.email.toString())).toObject())
+	return;
+});
 
 
 router.get('/verifyPrivileges_HIGH', async (req, res) => {

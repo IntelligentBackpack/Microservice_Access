@@ -3,11 +3,11 @@ import * as userI from './interfaces/User';
 import * as Istituto from './interfaces/Istituto';
 
 const conf: config = {
-    user: 'CloudSA665ece82', // better stored in an app setting such as process.env.DB_USER
-    password: 'unibo99@23MLABDL', // better stored in an app setting such as process.env.DB_PASSWORD
-    server: 'smartbaguniboserver.database.windows.net', // better stored in an app setting such as process.env.DB_SERVER
+    user: 'intelligentSystem', // better stored in an app setting such as process.env.DB_USER
+    password: 'LSS#2022', // better stored in an app setting such as process.env.DB_PASSWORD
+    server: 'intelligent-system.database.windows.net', // better stored in an app setting such as process.env.DB_SERVER
     port: 1433, // optional, defaults to 1433, better stored in an app setting such as process.env.DB_PORT
-    database: 'smartbagDB', // better stored in an app setting such as process.env.DB_NAME
+    database: 'IntelligentBackpack', // better stored in an app setting such as process.env.DB_NAME
     options: {
         encrypt: true
     }

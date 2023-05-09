@@ -1,6 +1,8 @@
 import request from 'supertest';
 import app, { response } from '../main/app';
 import * as protoGen from '../main/generated/access';
+import * as Istituto from '../main/interfaces/Istituto'
+import * as User from '../main/interfaces/User'
 import proto = protoGen.access;
 
 jest.setTimeout(20000);
@@ -162,6 +164,37 @@ describe('testing utility routing', function() {
         expect(serverResponse.statusCode).toBe(401)
         expect(serverResponse.body.message).toBe("Error")
     })
+
+    it("should get the required istituto", async () => {
+        const serverResponse = await request(app).get('/utility/get_istituto').query({ id:"1"})
+        expect(serverResponse.statusCode).toBe(200)
+        expect(serverResponse.body.ID).toBe(1)
+        expect(serverResponse.body.IstitutoNome).toBe("Istituto 1")
+        expect(serverResponse.body.IstitutoCitta).toBe("Città 1")
+    })
+
+    it("should return only 200 for void istituto id", async () => {
+        const serverResponse = await request(app).get('/utility/get_istituto').send()
+        expect(serverResponse.statusCode).toBe(200)
+        expect(Istituto.isAssigned(serverResponse.body)).toBe(false)
+    })
+
+    it("should get all istituti", async () => {
+        const serverResponse = await request(app).get('/utility/get_istituti').send()
+        expect(serverResponse.statusCode).toBe(200)
+    })
+
+    it("should get confirm that email exists", async () => {
+        const serverResponse = await request(app).get('/utility/emailExists').query({email: "admin"})
+        expect(serverResponse.statusCode).toBe(200)
+        expect(User.isAssigned(serverResponse.body)).toBe(true)
+    })
+
+    it("should get default user from email not existing", async () => {
+        const serverResponse = await request(app).get('/utility/emailExists').send()
+        expect(serverResponse.statusCode).toBe(200)
+        expect(User.isAssigned(serverResponse.body)).toBe(false)
+    })
 })
 
 describe('testing utility permissions funcitons', function() {
@@ -205,24 +238,6 @@ describe('testing utility permissions funcitons', function() {
             new proto.PermissionRequest_ChangeClasse({email_esecutore: userGood.email, email_utenteFinale: userGood.email, nuova_classe: "4C"}).toObject()));
         expect(serverResponse.statusCode).toBe(401)
         expect(serverResponse.body.message).toBe("You can't do this.")
-    })
-
-    it("should get the required istituto", async () => {
-        const serverResponse = await request(app).get('/utility/get_istituto').query({ id:"1"})
-        expect(serverResponse.statusCode).toBe(200)
-        expect(serverResponse.body.ID).toBe(1)
-        expect(serverResponse.body.IstitutoNome).toBe("Istituto 1")
-        expect(serverResponse.body.IstitutoCitta).toBe("Città 1")
-    })
-
-    it("should return only 200 for void istituto id", async () => {
-        const serverResponse = await request(app).get('/utility/get_istituto').send()
-        expect(serverResponse.statusCode).toBe(200)
-    })
-
-    it("should get all istituti", async () => {
-        const serverResponse = await request(app).get('/utility/get_istituti').send()
-        expect(serverResponse.statusCode).toBe(200)
     })
 })
 
