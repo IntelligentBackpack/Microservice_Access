@@ -1,8 +1,12 @@
 import { Router } from 'express';
+import request from 'supertest';
+
 import * as protoGen from "../generated/access";
+import * as protoGen2 from "../generated/book";
 import * as userI from '../interfaces/User'
 import * as utility from "../utilities"
 import proto = protoGen.access;
+import proto2 = protoGen2.book;
 
 import * as queryAsk from '../queries';
 import * as Istituto from '../interfaces/Istituto';
@@ -11,6 +15,8 @@ const router = Router();
 const re = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$");
 
 export default router;
+
+const bookMicroservice: string = "https://bookmicroservice.azurewebsites.net"
 
 
 router.get('/get_istituto', async (req, res) => {
@@ -37,8 +43,12 @@ router.get('/emailExists', async (req, res) => {
 		res.status(200).send(User.generate_protoUser(User.defaultUser()).toObject());
 		return;
 	}
-	res.status(200).send(User.generate_protoUser(await queryAsk.findUserWithEmail(req.query.email.toString())).toObject())
-	return;
+	const emailFound = await queryAsk.findUserWithEmail(req.query.email.toString())
+	if(emailFound.email != "") {
+		res.status(200).send(new proto.BasicMessage({message: "found"}).toObject())
+		return;
+	}
+	res.status(400).send(new proto.BasicMessage({message: "none"}).toObject())
 });
 
 
@@ -95,6 +105,9 @@ router.post('/change_email', async (req: {body: proto.UserRequest_ChangeEmail}, 
     	res.status(200).send(new proto.UserResponse({ message: "Confirmed change to email.", user: userI.generate_protoUser(req.body.user) }).toObject())
 		return;
 	}
+
+	//only after changing the email in user, it's good to change in the library
+	await request(bookMicroservice).post("/utility/changeEmail").send(new proto2.BasicMessage({message: req.body.nuova_Email, message2: req.body.user.email}).toObject());
 	/* istanbul ignore next */ res.status(500).send(new proto.UserResponse({ message: "Cannot change email" }).toObject())
 });
 

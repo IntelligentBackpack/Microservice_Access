@@ -152,6 +152,7 @@ describe('testing utility routing', function() {
         expect(serverResponse.body.message).toBe("Error")
     })
 
+    
     it("should pass the request LOW privileges", async () => {
         const serverResponse = await request(app).get('/utility/verifyPrivileges_LOW').query({ email: 'admin' });
         expect(serverResponse.statusCode).toBe(200)
