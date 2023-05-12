@@ -193,7 +193,13 @@ describe('testing utility routing', function() {
 
     it("should get default user from email not existing", async () => {
         const serverResponse = await request(app).get('/utility/emailExists').send()
-        expect(serverResponse.statusCode).toBe(200)
+        expect(serverResponse.statusCode).toBe(400)
+        expect(User.isAssigned(serverResponse.body)).toBe(false)
+    })
+
+    it("should get default user from email not existing", async () => {
+        const serverResponse = await request(app).get('/utility/emailExists').query({email: "dsfdfsvfjsngijfngu"})
+        expect(serverResponse.statusCode).toBe(400)
         expect(User.isAssigned(serverResponse.body)).toBe(false)
     })
 })

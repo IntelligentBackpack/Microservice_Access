@@ -40,15 +40,15 @@ router.get('/get_istituti', async (req, res) => {
 
 router.get('/emailExists', async (req, res) => {
 	if(req.query.email == undefined) {
-		res.status(200).send(User.generate_protoUser(User.defaultUser()).toObject());
+		res.status(400).send(User.generate_protoUser(User.defaultUser()).toObject());
 		return;
 	}
 	const emailFound = await queryAsk.findUserWithEmail(req.query.email.toString())
-	if(emailFound.email != "") {
-		res.status(200).send(new proto.BasicMessage({message: "found"}).toObject())
+	if(User.isAssigned(emailFound)) {
+		res.status(200).send(User.generate_protoUser(emailFound).toObject())
 		return;
 	}
-	res.status(400).send(new proto.BasicMessage({message: "none"}).toObject())
+	res.status(400).send(User.generate_protoUser(User.defaultUser()).toObject())
 });
 
 

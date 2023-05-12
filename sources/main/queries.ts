@@ -21,7 +21,6 @@ export async function findUserWithEmail(email: String): Promise<userI.User> {
                                         .query("select * from Utente where Email = '" + email + "'"); //execute the query
         poolConnection.close(); //close connection with database
         // ouput row contents from default record set
-
         if(resultSet.rowsAffected[0] == 0)
             return user;
 
