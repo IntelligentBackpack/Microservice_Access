@@ -16,7 +16,7 @@ const re = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$");
 
 export default router;
 
-const bookMicroservice: string = "https://bookmicroservice.azurewebsites.net"
+const bookMicroservice: string = "https://booksmicroservice.azurewebsites.net"
 
 
 router.get('/get_istituto', async (req, res) => {
