@@ -103,11 +103,11 @@ router.post('/change_email', async (req: {body: proto.UserRequest_ChangeEmail}, 
     if(await queryAsk.change_email(req.body.user.email, req.body.nuova_Email)) {
         req.body.user.email = req.body.nuova_Email;
     	res.status(200).send(new proto.UserResponse({ message: "Confirmed change to email.", user: userI.generate_protoUser(req.body.user) }).toObject())
+		//only after changing the email in user, it's good to change in the library
+		await request(bookMicroservice).post("/utility/changeEmail").send(new proto2.BasicMessage({message: req.body.nuova_Email, message2: req.body.user.email}).toObject());
 		return;
 	}
 
-	//only after changing the email in user, it's good to change in the library
-	await request(bookMicroservice).post("/utility/changeEmail").send(new proto2.BasicMessage({message: req.body.nuova_Email, message2: req.body.user.email}).toObject());
 	/* istanbul ignore next */ res.status(500).send(new proto.UserResponse({ message: "Cannot change email" }).toObject())
 });
 
