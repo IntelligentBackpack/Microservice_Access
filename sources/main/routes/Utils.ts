@@ -17,6 +17,7 @@ const re = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$");
 export default router;
 
 const bookMicroservice: string = "https://booksmicroservice.azurewebsites.net"
+const calendarMicroservice: string = "https://calendarmicroservice.azurewebsites.net"
 
 
 router.get('/get_istituto', async (req, res) => {
@@ -25,6 +26,15 @@ router.get('/get_istituto', async (req, res) => {
 		return;
 	}
 	res.status(200).send(Istituto.generate_protoIstituto(await queryAsk.get_istituto_info(+req.query.id)).toObject())
+	return;
+});
+
+router.get('/get_istitutoID', async (req, res) => {
+	if(req.query.istitutoNome == undefined || req.query.istitutoCitta == undefined) {
+		res.status(400).send(new proto.BasicMessage({message: "You need to specify the name of the insitute and the city"}).toObject());
+		return;
+	}
+	res.status(200).send(new proto.BasicMessage({message: (await queryAsk.get_istituto_ID(req.query.istitutoNome.toString(), req.query.istitutoCitta.toString())).toString()}).toObject())
 	return;
 });
 
@@ -50,7 +60,6 @@ router.get('/emailExists', async (req, res) => {
 	}
 	res.status(400).send(User.generate_protoUser(User.defaultUser()).toObject())
 });
-
 
 router.get('/verifyPrivileges_HIGH', async (req, res) => {
 	if(req.query.email == undefined) {
@@ -105,6 +114,7 @@ router.post('/change_email', async (req: {body: proto.UserRequest_ChangeEmail}, 
     	res.status(200).send(new proto.UserResponse({ message: "Confirmed change to email.", user: userI.generate_protoUser(req.body.user) }).toObject())
 		//only after changing the email in user, it's good to change in the library
 		await request(bookMicroservice).post("/utility/changeEmail").send(new proto2.BasicMessage({message: req.body.nuova_Email, message2: req.body.user.email}).toObject());
+		await request(calendarMicroservice).post("/utility/changeEmail").query({oldEmail: req.body.user.email, nuovaEmail: req.body.nuova_Email})
 		return;
 	}
 
