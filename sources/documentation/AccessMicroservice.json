@@ -266,7 +266,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Confirmed login.",
+            "description": "Get informations of an institute",
             "content": {
               "application/protobuf.Istituto": {
                 "schema": {
@@ -301,11 +301,11 @@
         "tags": [
           "utility"
         ],
-        "summary": "Get informations of an institute",
-        "description": "Get informations of an institute",
+        "summary": "Get informations of all institutes",
+        "description": "Get informations of all institutes",
         "responses": {
           "200": {
-            "description": "Confirmed login.",
+            "description": "Get all informations of all insitutes",
             "content": {
               "application/protobuf.Response_Istituti": {
                 "schema": {
@@ -316,6 +316,73 @@
                     "summary": "Return data",
                     "value": {
                       "istituti": "proto.istituti[]"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/utility/get_istitutoID/": {
+      "get": {
+        "tags": [
+          "utility"
+        ],
+        "summary": "Get informations of an institute",
+        "description": "Get informations of an institute",
+        "parameters": [
+          {
+            "name": "istitutoNome",
+            "in": "query",
+            "description": "Name of the institute",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "istitutoCitta",
+            "in": "query",
+            "description": "City of the institute",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get informations of an institute",
+            "content": {
+              "application/protobuf.BasicMessage": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicMessage"
+                },
+                "examples": {
+                  "messageReturn": {
+                    "summary": "Data",
+                    "value": {
+                      "message": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No informations in query passed",
+            "content": {
+              "application/protobuf.BasicMessage": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicMessage"
+                },
+                "examples": {
+                  "messageReturn": {
+                    "summary": "Data",
+                    "value": {
+                      "message": "You need to specify the name of the insitute and the city"
                     }
                   }
                 }

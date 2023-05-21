@@ -195,6 +195,22 @@ export async function get_istituto_info(istitutoID: number): Promise<Istituto.Is
     return ist;
 }
 
+export async function get_istituto_ID(istitutoNome: string, istitutoCitta: string): Promise<number> {
+    var ID = -1
+    try {
+        var poolConnection = await sql.connect(conf); //connect to the database
+        var resultSet:sql.IResult<any> = await poolConnection.request()
+                                        .query("select ID from Istituto where Nome = '" + istitutoNome + "' AND Città = '" + istitutoCitta + "'"); //execute the query
+        poolConnection.close(); //close connection with database
+        resultSet.recordset.forEach(function(row: any) {
+            ID = row.ID
+        });
+    } catch (e: any) /* istanbul ignore next */ {
+        console.error(e);
+    }
+    return ID;
+}
+
 export async function get_istituti(): Promise<Istituto.Istituto[]> {
     let ists : Istituto.Istituto[] = [];
     try {
