@@ -11,7 +11,6 @@ const userBad: proto.User = new proto.User({email: "mario", password: "password"
 const userGood: proto.User = new proto.User({email: makeid(15), password: "asdRE7687fds", nome: "mario", cognome: "rossi"});
 const istituto: proto.Istituto = new proto.Istituto({ID: 1, IstitutoNome: "Giulio Cesare", IstitutoCitta: "Marghera"})
 
-
 describe('Testing register routing', function() {
     it('Should return an error 400 for bad message format', async() => {
         //data
